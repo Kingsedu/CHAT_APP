@@ -4,6 +4,7 @@ import ChatUser from '../models/User.models';
 import { catchAsync } from 'async-handler-express';
 import status from 'http-status';
 import { generateToken } from '../libs/utilis';
+import { sendWelcomeEmail } from '../emails/emailHandler';
 export const signUp = catchAsync(async (req: Request, res: Response) => {
   const { fullName, email, password } = req.body;
   if (!fullName || !email || !password) {
@@ -37,8 +38,9 @@ export const signUp = catchAsync(async (req: Request, res: Response) => {
   });
   // let id = newUser._id as unknown as string;
   if (newUser) {
-    generateToken(newUser._id as unknown as string, res);
     await newUser.save();
+
+    generateToken(newUser._id as unknown as string, res);
 
     res.status(201).json({
       _id: newUser._id as unknown as string,
@@ -46,6 +48,16 @@ export const signUp = catchAsync(async (req: Request, res: Response) => {
       email: newUser.email,
       profilePic: newUser.profilePic,
     });
+
+    try {
+      await sendWelcomeEmail(
+        newUser.email,
+        newUser.fullName,
+        process.env.CLIENT_URL as string,
+      );
+    } catch (e) {
+      console.error('failed to send welcome email:', e);
+    }
   } else {
     res.status(400).json({ message: 'Invalid user data' });
   }
