@@ -5,6 +5,7 @@ import router from './routes/auth.route';
 import path from 'path';
 import connectDataBase from './db/database';
 import { errorHandler } from 'async-handler-express';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 const app = express();
@@ -13,6 +14,7 @@ const _dirname = path.resolve();
 // express middleware to be able to access the field that user will use
 app.use(express.json());
 app.use(errorHandler);
+app.use(cookieParser());
 const port = config_port;
 
 app.get('/index', (req, res) => {
