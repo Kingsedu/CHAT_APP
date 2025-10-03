@@ -2,6 +2,9 @@ import mongoose from 'mongoose';
 
 const connectDataBase = async (url: string) => {
   try {
+    if (!url) {
+      throw new Error('Mongo_url is not set');
+    }
     await mongoose.connect(url);
     console.log('connection is successful to database');
   } catch (e) {

@@ -37,8 +37,9 @@ export const signUp = catchAsync(async (req: Request, res: Response) => {
   });
   // let id = newUser._id as unknown as string;
   if (newUser) {
-    generateToken(newUser._id as unknown as string, res);
     await newUser.save();
+
+    generateToken(newUser._id as unknown as string, res);
 
     res.status(201).json({
       _id: newUser._id as unknown as string,
