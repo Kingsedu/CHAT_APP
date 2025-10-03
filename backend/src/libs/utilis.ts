@@ -7,6 +7,9 @@ interface UserInfo {
 }
 
 export const generateToken = (userId: string, res: Response) => {
+  if (!jwt_secret) {
+    throw new Error('the secret is undefined');
+  }
   const token = jwt.sign({ userId }, jwt_secret, {
     expiresIn: '7d',
   });
@@ -18,5 +21,4 @@ export const generateToken = (userId: string, res: Response) => {
     secure: process.env.NODE_ENV === 'development' ? false : true,
   });
   return token;
-  
 };
