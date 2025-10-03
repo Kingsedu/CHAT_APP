@@ -5,6 +5,8 @@ import { catchAsync } from 'async-handler-express';
 import status from 'http-status';
 import { generateToken } from '../libs/utilis';
 import { sendWelcomeEmail } from '../emails/emailHandler';
+import { RequestExtend } from '../middleware/auth.middleware';
+import cloudinary from '../libs/cloudinary';
 export const signUp = catchAsync(async (req: Request, res: Response) => {
   const { fullName, email, password } = req.body;
   if (!fullName || !email || !password) {
@@ -96,4 +98,39 @@ export const logout = (req: Request, res: Response) => {
     maxAge: 0,
   });
   res.status(200).json({ message: 'Logged out successfully' });
+};
+
+export const updateProfile = catchAsync(
+  async (req: RequestExtend, res: Response) => {
+    const { user } = req;
+    if (!user) {
+      res.status(401).json({ message: '' });
+      return;
+    }
+    try {
+      const { profilePic } = req.body;
+      if (!profilePic) {
+        res.status(400).json({ message: 'Profile pic is required' });
+      }
+      const userId = user?._id;
+      const uploadResponse = await cloudinary.uploader.upload(profilePic);
+      const updatedUser = await ChatUser.findByIdAndUpdate(
+        userId,
+        {
+          profilePic: uploadResponse.secure_url,
+        },
+        { new: true },
+      );
+      res.status(200).json({ user: updatedUser });
+    } catch (err) {
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+);
+
+export const checkUserAuth = (req: RequestExtend, res: Response) => {
+  if (!req.user) {
+    res.status(400).json({ message: 'not authorized' });
+  }
+  res.status(200).json(req.user);
 };
