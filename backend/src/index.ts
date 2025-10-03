@@ -1,14 +1,18 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import { config_port } from './config/config';
+import { config_port, mongo_url } from './config/config';
 import router from './routes/auth.route';
 import path from 'path';
+import connectDataBase from './db/database';
+import { errorHandler } from 'async-handler-express';
 
 dotenv.config();
 const app = express();
 
 const _dirname = path.resolve();
+// express middleware to be able to access the field that user will use
 app.use(express.json());
+app.use(errorHandler);
 const port = config_port;
 
 app.get('/index', (req, res) => {
@@ -16,7 +20,8 @@ app.get('/index', (req, res) => {
 });
 app.use('/api/v1/auth', router);
 const startServer = () => {
-  console.log('checking if its connected ');
+  console.log('checking if its connected to server');
+  connectDataBase(mongo_url);
   app.listen(port, () => {
     console.log(`server is listening at http://localhost:${port}`);
   });
