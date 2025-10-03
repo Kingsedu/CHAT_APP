@@ -15,3 +15,7 @@ export const config_cloudinary_env = {
   cloudinary_secret_key: process.env.CLOUDINARY_API_SECRET as string,
   cloudinary_name: process.env.CLOUDINARY_NAME as string,
 };
+export const arcjet_env_config = {
+  arcject_apikey: process.env.ARCJET_KEY as string,
+  arcjet_evn: process.env.ARCJET_ENV,
+};

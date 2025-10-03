@@ -7,8 +7,9 @@ import {
   checkUserAuth,
 } from '../controller/auth.controller';
 import { protectRoute } from '../middleware/auth.middleware';
+import { arjectProtection } from '../middleware/arcject.middleware';
 const router = Router();
-
+router.use(arjectProtection);
 router.post('/signup', signUp);
 router.post('/login', login);
 router.post('/logout', logout);

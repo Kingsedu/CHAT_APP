@@ -14,6 +14,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@arcjet/inspect": "^1.0.0-beta.12",
+    "@arcjet/node": "^1.0.0-beta.12",
     "@types/jsonwebtoken": "^9.0.10",
     "async-handler-express": "^0.2.4",
     "bcryptjs": "^3.0.2",
