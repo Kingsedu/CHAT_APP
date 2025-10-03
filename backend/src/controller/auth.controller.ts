@@ -63,10 +63,37 @@ export const signUp = catchAsync(async (req: Request, res: Response) => {
   }
 });
 
-export const login = (req: Request, res: Response) => {
-  res.send('login endpoint');
-};
+export const login = catchAsync(async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400).json({ message: 'invalid credential...' });
+    return;
+  }
+  const user = await ChatUser.findOne({ email });
+  if (!user) {
+    res.status(400).json({ message: 'Invalid Credentials' });
+    return;
+  }
+
+  const isPasswordCorrect = await bcrypt.compare(password, user?.password);
+
+  if (!isPasswordCorrect) {
+    res.status(400).json({ message: 'Invalid credential' });
+    return;
+  }
+
+  generateToken(user._id as unknown as string, res);
+  res.status(201).json({
+    _id: user._id as unknown as string,
+    email: user.email,
+    profilePic: user.profilePic,
+  });
+});
 
 export const logout = (req: Request, res: Response) => {
-  res.send('Logout Endpoint');
+  // res.clearCookie("jwt") ---> this clears the logout out
+  res.cookie('jwt', '', {
+    maxAge: 0,
+  });
+  res.status(200).json({ message: 'Logged out successfully' });
 };
