@@ -8,17 +8,24 @@ const express_1 = __importDefault(require("express"));
 const config_1 = require("./config/config");
 const auth_route_1 = __importDefault(require("./routes/auth.route"));
 const path_1 = __importDefault(require("path"));
+const database_1 = __importDefault(require("./db/database"));
+const async_handler_express_1 = require("async-handler-express");
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const _dirname = path_1.default.resolve();
+// express middleware to be able to access the field that user will use
 app.use(express_1.default.json());
+app.use(async_handler_express_1.errorHandler);
+app.use((0, cookie_parser_1.default)());
 const port = config_1.config_port;
 app.get('/index', (req, res) => {
     res.send('Testing the page to see if its working');
 });
 app.use('/api/v1/auth', auth_route_1.default);
 const startServer = () => {
-    console.log('checking if its connected ');
+    console.log('checking if its connected to server');
+    (0, database_1.default)(config_1.mongo_url);
     app.listen(port, () => {
         console.log(`server is listening at http://localhost:${port}`);
     });
