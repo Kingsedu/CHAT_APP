@@ -51,6 +51,7 @@ export const getAllChats = async (req: RequestExtend, res: Response) => {
   } catch (e: any) {
     console.error('Error in getChatPartners: ', e.message);
     res.status(500).json({ error: 'Internal server error' });
+    return;
   }
 };
 
@@ -77,6 +78,7 @@ export const getMesssageBetweenUser = async (
     res
       .status(500)
       .json({ message: 'something went wrong trying to get all messages' });
+    return;
   }
 };
 
@@ -90,8 +92,22 @@ export const sendMessageBetweenUser = async (
       return;
     }
     const { text, image } = req.body;
+    if (!text && !image) {
+      res.status(400).json({ message: 'Text or image is required' });
+      return;
+    }
+
     const { id: receiverId } = req.params;
     const senderId = req.user._id;
+    if (senderId.equals(receiverId)) {
+      res.status(400).json({ message: 'cannot send message to yourself' });
+      return;
+    }
+    const receiverExits = await ChatUser.exists({ _id: receiverId });
+    if (!receiverExits) {
+      res.status(404).json({ message: 'receiver not found' });
+      return;
+    }
     let imageUrl;
     if (image) {
       const uploadResponse = await cloudinary.uploader.upload(image);
@@ -110,5 +126,6 @@ export const sendMessageBetweenUser = async (
   } catch (e) {
     console.log('something went wrong in this message', e);
     res.status(500).json({ errorMessage: 'something went wrong', e });
+    return;
   }
 };
