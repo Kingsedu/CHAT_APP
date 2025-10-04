@@ -19,6 +19,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "async-handler-express": "^0.2.4",
     "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.7.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "http-status": "^1.7.4",
