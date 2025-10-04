@@ -6,7 +6,7 @@ import path from 'path';
 import connectDataBase from './db/database';
 import { errorHandler } from 'async-handler-express';
 import cookieParser from 'cookie-parser';
-
+import messageRoutes from './routes/messages.route';
 dotenv.config();
 const app = express();
 
@@ -21,6 +21,7 @@ app.get('/index', (req, res) => {
   res.send('Testing the page to see if its working');
 });
 app.use('/api/v1/auth', router);
+app.use('/api/v1/message', messageRoutes);
 const startServer = () => {
   console.log('checking if its connected to server');
   connectDataBase(mongo_url);
