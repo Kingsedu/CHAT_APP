@@ -27,11 +27,11 @@
     "http-status-codes": "^2.3.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.3",
-    "resend": "^6.1.2"
+    "resend": "^6.1.2",
+    "@types/cookie-parser": "^1.4.9",
+    "@types/express": "^5.0.3"
   },
   "devDependencies": {
-    "@types/cookie-parser": "^1.4.9",
-    "@types/express": "^5.0.3",
     "@types/node": "^24.6.2",
     "eslint": "^9.36.0",
     "nodemon": "^3.1.10",
