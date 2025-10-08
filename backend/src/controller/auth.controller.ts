@@ -16,7 +16,7 @@ export const signUp = catchAsync(async (req: Request, res: Response) => {
   if (password.length < 6) {
     res
       .status(400)
-      .json({ password: 'password must be greater than 6 characters' });
+      .json({ message: 'password must be greater than 6 characters' });
     return;
   }
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -38,19 +38,20 @@ export const signUp = catchAsync(async (req: Request, res: Response) => {
     email,
     password: hashedPassword,
   });
+
+  generateToken(newUser._id as unknown as string, res);
+
   // let id = newUser._id as unknown as string;
   if (newUser) {
     await newUser.save();
 
-    generateToken(newUser._id as unknown as string, res);
-
     res.status(201).json({
+      message: 'successful',
       _id: newUser._id as unknown as string,
       fullName: newUser.fullName,
       email: newUser.email,
       profilePic: newUser.profilePic,
     });
-
     try {
       await sendWelcomeEmail(
         newUser.email,
