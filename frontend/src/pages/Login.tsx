@@ -1,4 +1,3 @@
-// import React, { ReactElement } from "react";
 import { useState } from "react";
 import { useAuthUser } from "../store/useAuthStore";
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
@@ -11,7 +10,6 @@ import {
   LoaderIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-// import type { ReactElement } from "react";
 export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
