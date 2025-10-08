@@ -9,7 +9,7 @@ export const jwt_secret = process.env.JWT_SECRET as string;
 export const resend_api_key = process.env.RESEND_API_KEY as string;
 export const email_from = process.env.EMAIL_FROM as string;
 export const email_from_name = process.env.EMAIL_FROM_NAME as string;
-
+export const client_url = process.env.CLIENT_URL as string;
 export const config_cloudinary_env = {
   cloudinary_apikey: process.env.CLOUDINARY_API_KEY as string,
   cloudinary_secret_key: process.env.CLOUDINARY_API_SECRET as string,

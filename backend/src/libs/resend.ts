@@ -1,9 +1,8 @@
 import { Resend } from 'resend';
 import { resend_api_key } from '../config/config';
 
-
 export const resendClient = new Resend(resend_api_key);
-
+console.log('the resend api', resend_api_key);
 // (async function () {
 //   const { data, error } = await resend.emails.send({
 //     from: 'Acme <onboarding@resend.dev>',
