@@ -1,4 +1,4 @@
-// import React from "react";
+// import React, { ReactElement } from "react";
 import { useState } from "react";
 import { useAuthUser } from "../store/useAuthStore";
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
@@ -11,6 +11,7 @@ import {
   LoaderIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+// import type { ReactElement } from "react";
 export default function SignUp() {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -18,7 +19,7 @@ export default function SignUp() {
     password: "",
   });
   const { signup, isSigningUp } = useAuthUser();
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     signup(formData);
   };

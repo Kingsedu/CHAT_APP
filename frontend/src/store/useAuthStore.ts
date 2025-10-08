@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 interface AuthUser {
-  fullName: string;
+  fullName?: string;
   email: string;
   password: string;
 }
@@ -18,11 +18,14 @@ interface UserAuth {
   authUserMain: object | null;
   isCheckingAuth: boolean;
   isSigningUp: boolean;
+  isLoggingIn: boolean;
   checkAuth: () => void;
   signup: (data: AuthUser) => void;
+  login: (data: AuthUser) => void;
+  logout: () => void;
 }
 interface DataProps {
-  fullName: string;
+  fullName?: string;
   email: string;
   password: string;
 }
@@ -40,6 +43,7 @@ export const useAuthUser = create<UserAuth>((set) => ({
   authUserMain: null,
   isCheckingAuth: true,
   isSigningUp: false,
+  isLoggingIn: false,
   checkAuth: async () => {
     try {
       const res = await axiosInstance.get("/auth/check");
@@ -71,4 +75,43 @@ export const useAuthUser = create<UserAuth>((set) => ({
       set({ isSigningUp: false });
     }
   },
+  login: async (data: DataProps) => {
+    try {
+      set({ isLoggingIn: true });
+      const res = await axiosInstance.post("/auth/login", data);
+      set({ authUserMain: res.data });
+      toast.success("Logged in successfully");
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        const message =
+          e.response?.data?.message ||
+          e.response?.data?.error ||
+          "something went wrong. Try again";
+        toast.error(message);
+      } else {
+        toast.error("unexpected error occured");
+      }
+    } finally {
+      set({ isLoggingIn: false });
+    }
+  },
+  logout: async () => {
+    try {
+      const res = await axiosInstance.post("/auth/logout");
+      set({ authUserMain: null });
+      toast.success(res.data.message);
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        const message =
+          e.response?.data?.message ||
+          e.response?.data?.error ||
+          "something went wrong. Try again";
+        toast.error(message);
+      } else {
+        toast.error("unexpected error occured");
+      }
+    }
+  },
 }));
+
+// GMTA@K0dax24%
