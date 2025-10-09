@@ -23,6 +23,7 @@ interface UserAuth {
   signup: (data: AuthUser) => void;
   login: (data: AuthUser) => void;
   logout: () => void;
+  updateProfilePic: (data: { profilePic: string }) => void;
 }
 interface DataProps {
   fullName?: string;
@@ -80,6 +81,7 @@ export const useAuthUser = create<UserAuth>((set) => ({
       set({ isLoggingIn: true });
       const res = await axiosInstance.post("/auth/login", data);
       set({ authUserMain: res.data });
+      console.log("Login successful:", res.data);
       toast.success("Logged in successfully");
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
@@ -110,6 +112,17 @@ export const useAuthUser = create<UserAuth>((set) => ({
       } else {
         toast.error("unexpected error occured");
       }
+    }
+  },
+  async updateProfilePic(data) {
+    try {
+      const res = await axiosInstance.put("auth/update-profile", data);
+      set({ authUserMain: res.data });
+      console.log("profile updated successfully");
+      toast.success("Profile picture updated successfully");
+    } catch (e: unknown) {
+      console.log("Error in updating profile pic:", e);
+      toast.error("Failed to update profile picture");
     }
   },
 }));
