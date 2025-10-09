@@ -8,6 +8,14 @@ export default function ProfileHeader() {
   const { isSoundEnabled, toggleSound } = useChatStore();
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
   const mouseClickSound = new Audio("/sounds/mouse-click.mp3");
+
+  // export default function ProfileHeader() {
+  //   const { logout, authUserMain, updateProfilePic } = useAuthUser();
+  //   const { isSoundEnabled, toggleSound } = useChatStore();
+  //   const [selectedImg, setSelectedImg] = useState<string | null>(null);
+  //   const fileInputRef = useRef<HTMLInputElement>(null);
+  //   // ...rest of component
+  // }
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = async (

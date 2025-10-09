@@ -23,7 +23,7 @@ interface UserAuth {
   signup: (data: AuthUser) => void;
   login: (data: AuthUser) => void;
   logout: () => void;
-  updateProfilePic?: (data: { profilePic: string }) => void;
+  updateProfilePic: (data: { profilePic: string }) => void;
 }
 interface DataProps {
   fullName?: string;

@@ -18,7 +18,7 @@ export default function ContactList() {
     <>
       {allContacts.map((contact, idx) => (
         <div
-          key={idx}
+          key={contact.id || contact._id}
           className="p-4 transition-colors rounded-lg cursor-pointer bg-cyan-500/10 hover:bg-cyan-500/20"
           onClick={() => setSelectedUser(contact)}
         >
