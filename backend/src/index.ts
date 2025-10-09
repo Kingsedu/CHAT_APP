@@ -15,7 +15,8 @@ const app = express();
 const _dirname = path.resolve();
 // express middleware to be able to access the field that user will use
 app.use(cors({ origin: client_url, credentials: true }));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(cookieParser());
 const port = config_port;
 
