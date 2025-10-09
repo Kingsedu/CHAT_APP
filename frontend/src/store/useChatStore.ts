@@ -6,8 +6,8 @@ import axios from "axios";
 //   selectedUser: object | null;
 // }
 interface ChatStore {
-  allContacts: string[];
-  chats: string[];
+  allContacts: [];
+  chats: [];
   message: string[];
   activeTab: string;
   selectedUser: object | null;
@@ -31,6 +31,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   isSoundEnabled: localStorage.getItem("isSoundEnabled") === "true",
   toggleSound: () => {
     const newValue = !get().isSoundEnabled;
+    set({ isSoundEnabled: newValue });
     localStorage.setItem("isSoundEnableed", newValue.toString());
   },
   setActiveTab: (tab: string) => set({ activeTab: tab }),
@@ -40,7 +41,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     try {
       set({ isUsersLoading: true });
       const res = await axiosInstance.get("/message/contacts");
-      set({ allContacts: res.data });
+      set({ allContacts: res.data.user ?? [] });
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
         const message =
