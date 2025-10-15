@@ -19,6 +19,7 @@ interface ChatStore {
   getAllContacts: () => void;
   getMyChatPartners: () => void;
   toggleSound: () => void;
+  getMessagesByUSerId: (userId: string) => void;
 }
 export const useChatStore = create<ChatStore>((set, get) => ({
   allContacts: [],
@@ -73,6 +74,25 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
     } finally {
       set({ isUsersLoading: false });
+    }
+  },
+  getMessagesByUSerId: async (userId: string) => {
+    set({ isMessagesLoading: true });
+    try {
+      const res = await axiosInstance.get(`/message/${userId}`);
+      set({ message: res.data });
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        const message =
+          e.response?.data?.message ||
+          e.response?.data?.error ||
+          "something went wrong. Try again";
+        toast.error(message);
+      } else {
+        toast.error("unexpected error occured");
+      }
+    } finally {
+      set({ isMessagesLoading: false });
     }
   },
 }));
